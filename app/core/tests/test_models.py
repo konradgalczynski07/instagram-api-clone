@@ -26,13 +26,6 @@ class ModelTest(TestCase):
         self.assertEqual(user.username, username)
         self.assertTrue(user.check_password(password))
 
-    def test_username_must_be_longer_than_2_char(self):
-        """Test the username is longer than 2 characters"""
-        username = 'te'
-
-        with self.assertRaises(ValueError):
-            create_sample_user(username=username)
-
     def test_new_user_username_is_lowercase(self):
         """Test the username for a new user is in lowercase"""
         username = 'TEST'

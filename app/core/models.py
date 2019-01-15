@@ -11,8 +11,6 @@ class UserManager(BaseUserManager):
             raise ValueError('Users must have an email address')
         if not username:
             raise ValueError('Users must have a username')
-        if len(username) <= 2:
-            raise ValueError('Username must be longer than 2 characters')
         user = self.model(email=self.normalize_email(email),
                           username=username.lower(),
                           **extra_fields)
