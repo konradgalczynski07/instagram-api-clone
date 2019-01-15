@@ -33,14 +33,17 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model that supports using email and """
+    username = models.CharField(max_length=30, unique=True)
     email = models.EmailField(max_length=255, unique=True)
-    username = models.EmailField(max_length=30, unique=True)
-    fullname = models.CharField(max_length=60)
-    bio = models.TextField()
+    fullname = models.CharField(max_length=60, blank=True)
+    bio = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(auto_now_add=True)
 
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
+
+    def __str__(self):
+        return self.username
