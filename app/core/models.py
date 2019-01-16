@@ -1,6 +1,16 @@
+import uuid
+import os
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, \
     PermissionsMixin
+
+
+def image_file_path(instance, filename):
+    """Generate file path for new recipe image"""
+    ext = filename.split('.')[-1]
+    filename = f'{uuid.uuid4()}.{ext}'
+
+    return os.path.join('uploads/', filename)
 
 
 class UserManager(BaseUserManager):
@@ -35,6 +45,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     fullname = models.CharField(max_length=60, blank=True)
     bio = models.TextField(blank=True)
+    profile_pic = models.ImageField(
+        upload_to=image_file_path,
+        default='avatar.png')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 

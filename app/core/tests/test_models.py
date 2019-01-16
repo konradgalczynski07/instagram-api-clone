@@ -1,5 +1,9 @@
+from unittest.mock import patch
+
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+
+from core import models
 
 
 def create_sample_user(email='test@test.com',
@@ -55,3 +59,13 @@ class ModelTest(TestCase):
 
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
+
+    @patch('uuid.uuid4')
+    def test_profile_pic_name_uuid(self, mock_uuid):
+        """Test that image is saved in the correct location"""
+        uuid = 'test-uuid'
+        mock_uuid.return_value = uuid
+        file_path = models.image_file_path(None, 'myimage.jpg')
+
+        exp_path = f'uploads/{uuid}.jpg'
+        self.assertEqual(file_path, exp_path)
