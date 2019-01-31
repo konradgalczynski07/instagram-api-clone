@@ -7,8 +7,8 @@ from rest_framework import status
 
 from core.tests.test_models import create_sample_user
 
-CREATE_USER_URL = reverse('user:create')
-TOKEN_URL = reverse('user:token')
+REGISTER_USER_URL = reverse('user:register')
+LOGIN_URL = reverse('user:login')
 ME_URL = reverse('user:me')
 
 

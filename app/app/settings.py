@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'core',
     'user',
+    'post'
 ]
 
 MIDDLEWARE = [
@@ -131,3 +132,8 @@ STATIC_ROOT = '/vol/web/static'
 MEDIA_ROOT = '/vol/web/media'
 
 AUTH_USER_MODEL = 'core.User'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 2
+}
