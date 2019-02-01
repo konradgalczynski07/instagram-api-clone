@@ -25,7 +25,7 @@ class PublicUserApiTests(TestCase):
             'username': 'test',
             'password': 'testpass'
         }
-        res = self.client.post(CREATE_USER_URL, payload)
+        res = self.client.post(REGISTER_USER_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         user = get_user_model().objects.get(**res.data)
@@ -41,7 +41,7 @@ class PublicUserApiTests(TestCase):
         }
         create_sample_user(**payload)
 
-        res = self.client.post(CREATE_USER_URL, payload)
+        res = self.client.post(REGISTER_USER_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -52,7 +52,7 @@ class PublicUserApiTests(TestCase):
             'username': 'test',
             'password': 'pw'
         }
-        res = self.client.post(CREATE_USER_URL, payload)
+        res = self.client.post(REGISTER_USER_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         user_exists = get_user_model().objects.filter(
@@ -67,7 +67,7 @@ class PublicUserApiTests(TestCase):
             'username': 'te',
             'password': 'testpass'
         }
-        res = self.client.post(CREATE_USER_URL, payload)
+        res = self.client.post(REGISTER_USER_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         user_exists = get_user_model().objects.filter(
@@ -82,7 +82,7 @@ class PublicUserApiTests(TestCase):
             'username': 'test',
             'password': 'testpass'
         }
-        res = self.client.post(TOKEN_URL, payload)
+        res = self.client.post(LOGIN_URL, payload)
 
         self.assertIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -94,7 +94,7 @@ class PublicUserApiTests(TestCase):
             'username': 'test',
             'password': 'wrong'
         }
-        res = self.client.post(TOKEN_URL, payload)
+        res = self.client.post(LOGIN_URL, payload)
 
         self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
@@ -105,7 +105,7 @@ class PublicUserApiTests(TestCase):
                 'username': 'test',
                 'password': 'testpass'
             }
-            res = self.client.post(TOKEN_URL, payload)
+            res = self.client.post(LOGIN_URL, payload)
 
             self.assertNotIn('token', res.data)
             self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
@@ -113,7 +113,7 @@ class PublicUserApiTests(TestCase):
         def test_create_token_missing_field(self):
             """Test that username and password are required"""
             res = self.client.post(
-                TOKEN_URL, {'username': 'test', 'password': ''})
+                LOGIN_URL, {'username': 'test', 'password': ''})
             self.assertNotIn('token', res.data)
             self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -137,12 +137,6 @@ class PrivateUserApiTests(TestCase):
         res = self.client.get(ME_URL)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data, {
-            'email': self.user.email,
-            'username': self.user.username,
-            'fullname': self.user.fullname,
-            'bio': self.user.bio
-        })
 
     def test_post_me_not_allowed(self):
         """Test that POST is not allowed on the me URL"""

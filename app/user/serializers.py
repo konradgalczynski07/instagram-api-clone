@@ -70,27 +70,30 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 
 class UserPostsSerializer(serializers.ModelSerializer):
-
+    """Serializer for viewing a user profile"""
     number_of_comments = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
-        fields = ('id', 'photo',
-                  'text', 'location', 'number_of_comments', 'posted_on')
+        fields = ('id', 'photo', 'text', 'location', 'number_of_likes',
+                  'number_of_comments', 'posted_on')
 
     def get_number_of_comments(self, obj):
         return Comment.objects.filter(post=obj).count()
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    """Serializer for viewing a user profile"""
+    """Serializer for viewing a user posts"""
     number_of_posts = serializers.SerializerMethodField()
+    followed_by_req_user = serializers.SerializerMethodField()
     user_posts = serializers.SerializerMethodField('paginated_user_posts')
 
     class Meta:
         model = get_user_model()
         fields = ('id', 'username', 'fullname',
-                  'bio', 'profile_pic', 'number_of_posts', 'user_posts')
+                  'bio', 'profile_pic', 'number_of_followers',
+                  'number_of_following', 'number_of_posts',
+                  'user_posts', 'followed_by_req_user')
 
     def get_number_of_posts(self, obj):
         return Post.objects.filter(author=obj).count()
@@ -104,3 +107,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
         serializer = UserPostsSerializer(user_posts, many=True)
 
         return serializer.data
+
+    def get_followed_by_req_user(self, obj):
+        user = self.context['request'].user
+        return user in obj.followers.all()
+
+
+class FollowSerializer(serializers.ModelSerializer):
+    """Serializer for listing all followers"""
+
+    class Meta:
+        model = get_user_model()
+        fields = ('username', 'profile_pic')

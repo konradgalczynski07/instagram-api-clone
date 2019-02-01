@@ -17,7 +17,6 @@ def image_file_path(instance, filename):
 class UserManager(BaseUserManager):
 
     def create_user(self, email, username, password=None, **extra_fields):
-        """Creates and saves a new user"""
         if not email:
             raise ValueError('Users must have an email address')
         if not username:
@@ -31,7 +30,6 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, username, password):
-        """Creates and saves a new super user"""
         user = self.create_user(email, username, password)
         user.is_staff = True
         user.is_superuser = True
@@ -41,7 +39,6 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """Custom user model that supports using email and """
     username = models.CharField(max_length=30, unique=True)
     email = models.EmailField(max_length=255, unique=True)
     fullname = models.CharField(max_length=60, blank=True)
@@ -49,6 +46,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     profile_pic = models.ImageField(
         upload_to=image_file_path,
         default='avatar.png')
+    followers = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                       related_name="user_followers",
+                                       blank=True,
+                                       symmetrical=False)
+    following = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                       related_name="user_following",
+                                       blank=True,
+                                       symmetrical=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
@@ -57,6 +62,18 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
+
+    def number_of_followers(self):
+        if self.followers.count():
+            return self.followers.count()
+        else:
+            return 0
+
+    def number_of_following(self):
+        if self.following.count():
+            return self.following.count()
+        else:
+            return 0
 
     def __str__(self):
         return self.username
@@ -78,9 +95,19 @@ class Post(models.Model):
     text = models.TextField(max_length=500, blank=True)
     location = models.CharField(max_length=30, blank=True)
     posted_on = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                   related_name="likers",
+                                   blank=True,
+                                   symmetrical=False)
 
     class Meta:
         ordering = ['-posted_on']
+
+    def number_of_likes(self):
+        if self.likes.count():
+            return self.likes.count()
+        else:
+            return 0
 
     def __str__(self):
         return f'{self.author}\'s post'
@@ -95,6 +122,9 @@ class Comment(models.Model):
                                related_name='user_comments')
     text = models.CharField(max_length=100)
     posted_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-posted_on']
 
     def __str__(self):
         return f'{self.author}\'s comment'
