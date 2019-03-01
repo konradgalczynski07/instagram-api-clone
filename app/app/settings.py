@@ -150,6 +150,8 @@ REST_FRAMEWORK = {
 
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': timedelta(hours=36),
+    'JWT_PAYLOAD_HANDLER':
+    'core.jwt_payload.jwt_payload_handler',
 }
 
 CORS_ORIGIN_WHITELIST = ('localhost:3000',)
