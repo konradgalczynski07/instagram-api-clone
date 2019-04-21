@@ -35,7 +35,7 @@ Take a look at the [frontend](https://github.com/konradgalczynski07/react-instag
 - localhost:8000/api/post/comment/<post_id>/
 - localhost:8000/api/post/comment/<comment_id>/
 - localhost:8000/api/post/like/<post_id>/
-- localhost:8000/api/post/<id>/get_likers/
+- localhost:8000/api/post/<post_id>/get_likers/
   
 ## Instalation
 1. Clone Git repository
