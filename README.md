@@ -10,7 +10,7 @@ Take a look at the [frontend](https://github.com/konradgalczynski07/react-instag
 -   posting photos
 -   commenting and liking photos
 -   following system
--   all CRUD opetation on posts, comments, follows and likes with relevant permissions
+-   all CRUD operations on posts, comments, follows and likes with relevant permissions
 
 ## Technology Stack:
 
@@ -37,9 +37,9 @@ Take a look at the [frontend](https://github.com/konradgalczynski07/react-instag
 - localhost:8000/api/post/like/<post_id>/
 - localhost:8000/api/post/<id>/get_likers/
   
-  ## Instalation
-  1. Clone Git repository
-  2. Run `docker-compose up`
+## Instalation
+1. Clone Git repository
+2. Run `docker-compose up`
 
 
 
