@@ -25,10 +25,10 @@ Take a look at the [frontend](https://github.com/konradgalczynski07/react-instag
 - localhost:8000/api/user/register/
 - localhost:8000/api/user/login/
 - localhost:8000/api/user/me/
-- localhost:8000/api/user/<username>/
-- localhost:8000/api/user/<username>/follow/
-- localhost:8000/api/user/<username>/get-followers/
-- localhost:8000/api/user/<username>get-following/
+- localhost:8000/api/user/<slug:username>/
+- localhost:8000/api/user/<slug:username>/follow/
+- localhost:8000/api/user/<slug:username>/get-followers/
+- localhost:8000/api/user/<slug:username>get-following/
 - localhost:8000/api/post/
 - localhost:8000/api/post/feed/
 - localhost:8000/api/post/<post_id>/
